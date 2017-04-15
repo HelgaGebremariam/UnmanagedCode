@@ -11,24 +11,7 @@ namespace ImageViewer.Services
     public class ImageService
     {
         [DllImport("F:\\.net mentoring\\Hometask\\UnmanagedCode\\ImageViewer\\x64\\Release\\ImageViewer.CppJavaBridge.dll", EntryPoint = "?MakeImageBlackAndWhite@@YAPEAHPEAHHH@Z")]
-        public static extern IntPtr MakeImageBlackAndWhiteStatic(IntPtr array, int height, int width);
-
-        public struct RGB
-        {
-            public byte B;
-            public byte G;
-            public byte R;
-            public byte A;
-        }
-
-        [StructLayout(LayoutKind.Explicit)]
-        struct IntRgb
-        {
-            [FieldOffset(0)]
-            public RGB rgbValue;
-            [FieldOffset(0)]
-            public int intValue;
-        };
+        public static extern IntPtr MakeImageBlackAndWhiteStatic(int[] array, int height, int width);
 
         private int[] BitmapToIntArray(Bitmap source)
         {
@@ -54,24 +37,12 @@ namespace ImageViewer.Services
 
         public Bitmap MakeImageBlackAndWhite(Bitmap source)
         {
-            Bitmap result = new Bitmap(source.Width, source.Height);
+            int[] result = new int[source.Width*source.Height];
+            int[] array = BitmapToIntArray(source);
+            IntPtr resultArray = MakeImageBlackAndWhiteStatic(array, array.Length, 1);
+            Marshal.Copy(resultArray, result, 0, array.Length);
+            return IntArrayToBitmap(result, source.Width, source.Height);
 
-
-            int[] arr = BitmapToIntArray(source);
-            int width = source.Width;
-            int height = source.Height;
-            for(int i = 0; i < source.Width; i++)
-                for(int j = 0; j < source.Height; j++)
-                {
-                    int pix = source.GetPixel(i, j).ToArgb();
-                    int r = (pix >> 16) & 0xFF;
-                    int green = (pix >> 8) & 0xFF;
-                    int blue = pix & 0xFF;
-                    IntRgb intRgb = new IntRgb() { intValue = arr[i * source.Height + j] };
-                     result.SetPixel(i, j, Color.FromArgb(intRgb.rgbValue.R, intRgb.rgbValue.G, intRgb.rgbValue.B));
-                }
-
-            return result;
         }
     }
 }

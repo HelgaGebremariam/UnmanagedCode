@@ -13,7 +13,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
-using System.Windows;
 using Microsoft.Win32;
 using System.Drawing;
 using System.Drawing.Imaging;
