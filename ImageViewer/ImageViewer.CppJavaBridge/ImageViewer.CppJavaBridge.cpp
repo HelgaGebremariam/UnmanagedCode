@@ -4,6 +4,8 @@
 #include "stdafx.h"
 #include <jni.h>
 
+JavaVM *jvm = 0;
+JNIEnv* env = 0;
 
 JNIEnv* GetJniEnvironment(JavaVM* jvm)
 {
@@ -12,7 +14,7 @@ JNIEnv* GetJniEnvironment(JavaVM* jvm)
 	JavaVMInitArgs vm_args;
 	JavaVMOption* options = new JavaVMOption[1];
 
-	options[0].optionString = "-Djava.class.path=C:\\Users\\Volha\\Documents\\NetBeansProjects\\ImageProcessor\\dist\\ImageProcessor.jar";
+	options[0].optionString = "-Djava.class.path=ImageProcessor.jar";
 	//options[1].optionString = (char *) "-Djava.compiler=NONE";
 	vm_args.version = JNI_VERSION_1_6;
 	vm_args.nOptions = 1;
@@ -49,9 +51,10 @@ int* CallIntArrayFunction(JNIEnv *env, char* functionName, int* sourceArray, int
 
 __declspec(dllexport) int* MakeImageBlackAndWhite(int* sourceArray, int height, int width)
 {
-	
-	JavaVM *jvm = 0;
-	JNIEnv* env = GetJniEnvironment(jvm);
+	if (jvm == 0 || env == 0)
+	{
+		env = GetJniEnvironment(jvm);
+	}
 	int* result = CallIntArrayFunction(env, "MakeImageBlackAndWhite", sourceArray, height, width);
 	return result;
 }

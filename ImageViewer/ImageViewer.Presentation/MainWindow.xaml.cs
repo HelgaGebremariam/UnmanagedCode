@@ -20,9 +20,6 @@ using ImageViewer.Services;
 
 namespace ImageViewer.Presentation
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private string sourceImageFileName;
@@ -41,7 +38,6 @@ namespace ImageViewer.Presentation
                 sourceImageFileName = openFileDialog.FileName;
                 InitializeSourceImageFromFile();
                 ShowCurrentImage();
-                MakeBlackAndWhite();
             }
         }
 
@@ -49,6 +45,7 @@ namespace ImageViewer.Presentation
         {
             sourceImage = new Bitmap(sourceImageFileName);
             currentImage = sourceImage;
+            ResizeCurrentImage();
         }
 
         private void ShowCurrentImage()
@@ -70,7 +67,29 @@ namespace ImageViewer.Presentation
         {
             ImageService service = new ImageService();
             currentImage = service.MakeImageBlackAndWhite(currentImage);
+            
+        }
+
+        private void btnBlackAndWhite_Click(object sender, RoutedEventArgs e)
+        {
+            MakeBlackAndWhite();
             ShowCurrentImage();
+        }
+
+        private void ResizeCurrentImage()
+        {
+            int height = (int)imgCurrentImage.Height;
+            int width = (int)imgCurrentImage.Width;
+            double scale = 1;
+            if(currentImage.Height < currentImage.Width)
+            {
+                scale = (double)height / (double)currentImage.Height;
+            }
+            else
+            {
+                scale = (double)width/(double)currentImage.Width;
+            }
+            currentImage = new Bitmap(currentImage, (int)(currentImage.Width * scale), (int)(currentImage.Height * scale));
         }
     }
 }

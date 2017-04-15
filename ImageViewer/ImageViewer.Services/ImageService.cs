@@ -10,8 +10,8 @@ namespace ImageViewer.Services
 {
     public class ImageService
     {
-        [DllImport("F:\\.net mentoring\\Hometask\\UnmanagedCode\\ImageViewer\\x64\\Release\\ImageViewer.CppJavaBridge.dll", EntryPoint = "?MakeImageBlackAndWhite@@YAPEAHPEAHHH@Z")]
-        public static extern IntPtr MakeImageBlackAndWhiteStatic(int[] array, int height, int width);
+        [DllImport("\\..\\..\\..\\x64\\Release\\ImageViewer.CppJavaBridge.dll", EntryPoint = "?MakeImageBlackAndWhite@@YAPEAHPEAHHH@Z")]
+        private static extern IntPtr MakeImageBlackAndWhiteStatic(int[] array, int height, int width);
 
         private int[] BitmapToIntArray(Bitmap source)
         {
