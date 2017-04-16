@@ -72,6 +72,8 @@ namespace ImageViewer.Presentation
 
         private void btnBlackAndWhite_Click(object sender, RoutedEventArgs e)
         {
+            if (currentImage == null)
+                return;
             MakeBlackAndWhite();
             ShowCurrentImage();
         }
